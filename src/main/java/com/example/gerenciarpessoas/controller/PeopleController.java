@@ -6,6 +6,7 @@ import com.example.gerenciarpessoas.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,13 +29,22 @@ public class PeopleController {
     public People updatePeople(@RequestBody People people){
         return service.updatePepole(people);
     }
-    @GetMapping
-    public ResponseEntity<List<Address>> findAll() {
-        return ResponseEntity.ok(service.findUsers());
+    @GetMapping("{id}")
+    public ResponseEntity<People> findAllById(@PathVariable Long id) {
+        People people = service.findByPeopleId(id);
+        if (people != null) {
+            return ResponseEntity.ok(people);
+        }
+        return ResponseEntity.notFound().build();
     }
-//    @PostMapping("/address")
-//    public Address createPeople(@RequestBody Address address) {
-//        return service.saveAddress(address);
-//    }
-//
+    @GetMapping("/people")
+    public ResponseEntity<List<People>> findAllPeople() {
+        return ResponseEntity.ok(service.findPeople());
+    }
+
+    @GetMapping("/address")
+    public ResponseEntity<List<Address>> findAllAddress() {
+        return ResponseEntity.ok(service.findAddress());
+    }
+
 }
