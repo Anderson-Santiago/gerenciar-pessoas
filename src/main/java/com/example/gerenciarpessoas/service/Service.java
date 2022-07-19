@@ -1,7 +1,7 @@
 package com.example.gerenciarpessoas.service;
 
-import com.example.gerenciarpessoas.dto.Address;
-import com.example.gerenciarpessoas.dto.People;
+import com.example.gerenciarpessoas.entity.Address;
+import com.example.gerenciarpessoas.entity.People;
 import com.example.gerenciarpessoas.repository.AddressRepository;
 import com.example.gerenciarpessoas.repository.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,20 @@ public class Service {
     PeopleRepository peoplerepository;
     @Autowired
     AddressRepository addressRepository;
+
     public People savePeople(People people) {
         return peoplerepository.save(people);
     }
+
     public List<Address> findAddress() {
         return addressRepository.findAll();
     }
+
     public List<People> findPeople() {
         return peoplerepository.findAll();
     }
 
-    public People updatePepole(People people){
+    public People updatePepole(People people) {
         Address address = people.getAddress();
         addressRepository.save(address);
         return peoplerepository.save(people);

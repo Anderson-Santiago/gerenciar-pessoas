@@ -1,7 +1,7 @@
 package com.example.gerenciarpessoas.controller;
 
-import com.example.gerenciarpessoas.dto.Address;
-import com.example.gerenciarpessoas.dto.People;
+import com.example.gerenciarpessoas.entity.Address;
+import com.example.gerenciarpessoas.entity.People;
 import com.example.gerenciarpessoas.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +25,12 @@ public class PeopleController {
     public People createPeople(@RequestBody People people) {
         return service.savePeople(people);
     }
+
     @PutMapping
-    public People updatePeople(@RequestBody People people){
+    public People updatePeople(@RequestBody People people) {
         return service.updatePepole(people);
     }
+
     @GetMapping("{id}")
     public ResponseEntity<People> findAllById(@PathVariable Long id) {
         People people = service.findByPeopleId(id);
@@ -37,6 +39,7 @@ public class PeopleController {
         }
         return ResponseEntity.notFound().build();
     }
+
     @GetMapping("/people")
     public ResponseEntity<List<People>> findAllPeople() {
         return ResponseEntity.ok(service.findPeople());
