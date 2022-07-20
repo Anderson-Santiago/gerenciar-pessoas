@@ -1,9 +1,9 @@
 package com.example.gerenciarpessoas.service;
 
-import com.example.gerenciarpessoas.entity.Address;
-import com.example.gerenciarpessoas.entity.People;
+import com.example.gerenciarpessoas.domain.Address;
+import com.example.gerenciarpessoas.domain.Person;
 import com.example.gerenciarpessoas.repository.AddressRepository;
-import com.example.gerenciarpessoas.repository.PeopleRepository;
+import com.example.gerenciarpessoas.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -12,30 +12,49 @@ import java.util.Optional;
 @org.springframework.stereotype.Service
 public class Service {
     @Autowired
-    PeopleRepository peoplerepository;
+    PersonRepository personrepository;
     @Autowired
     AddressRepository addressRepository;
 
-    public People savePeople(People people) {
-        return peoplerepository.save(people);
+    public List<Person> findPeople() {
+        return personrepository.findAll();
+    }
+
+    public Person savePerson(Person person) {
+        return personrepository.save(person);
+    }
+
+    public Person updatePerson(Long personId, Person person) {
+        Person personToPersist = findByPersonId(personId);
+        personToPersist.setName(person.getName());
+        personToPersist.setBirthDate(person.getBirthDate());
+        return personrepository.save(personToPersist);
+    }
+
+    public Person findByPersonId(Long personId) {
+        Optional<Person> Person = personrepository.findById(personId);
+        return Person.orElse(null);
+    }
+
+
+
+
+
+
+    public Address saveAddress(Long personId, Address address) {
+        address.getPerson().setId(personId);
+        Person person = findByPersonId(personId);
+        person.setAddress(address);
+        return addressRepository.save(address);
     }
 
     public List<Address> findAddress() {
         return addressRepository.findAll();
     }
-
-    public List<People> findPeople() {
-        return peoplerepository.findAll();
+    public List<Address> findAddressPersonId(Long personId) {
+//        Person person = findByPersonId(personId);
+//        Long idAddress = person.getAddress().getId();
+        return addressRepository.findByPersonId(personId);
     }
 
-    public People updatePepole(People people) {
-        Address address = people.getAddress();
-        addressRepository.save(address);
-        return peoplerepository.save(people);
-    }
-
-    public People findByPeopleId(Long id) {
-        Optional<People> people = peoplerepository.findById(id);
-        return people.orElse(null);
-    }
 }
