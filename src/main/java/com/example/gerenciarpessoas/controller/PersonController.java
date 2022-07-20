@@ -2,7 +2,6 @@ package com.example.gerenciarpessoas.controller;
 
 import com.example.gerenciarpessoas.domain.Address;
 import com.example.gerenciarpessoas.domain.Person;
-import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/person")
@@ -28,6 +26,7 @@ public class PersonController {
     public Person createPerson(@RequestBody Person Person) {
         return service.savePerson(Person);
     }
+
     @GetMapping
     public List<Person> findAllPeople() {
         return service.findPeople();
@@ -52,11 +51,10 @@ public class PersonController {
     public ResponseEntity<List<Address>> findAllAddress() {
         return ResponseEntity.ok(service.findAddress());
     }
+
     @GetMapping("/{personId}/address")
-    public ResponseEntity<List<Address>> findAddressId(@PathVariable Long personId)  {
+    public ResponseEntity<List<Address>> findAddressId(@PathVariable Long personId) {
         return ResponseEntity.ok(service.findAddressPersonId(personId));
     }
-
-
 
 }

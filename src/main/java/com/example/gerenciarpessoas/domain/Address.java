@@ -22,8 +22,6 @@ public class Address {
     private Integer number;
     private String city;
     private Boolean mainAddress;
-//    @ManyToOne
-//    private Person person;
     @OneToOne
     @JsonBackReference
     private Person person;

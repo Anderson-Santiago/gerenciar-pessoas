@@ -1,6 +1,5 @@
 package com.example.gerenciarpessoas.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.Entity;

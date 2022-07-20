@@ -41,6 +41,7 @@ public class Service {
 
     public Address saveAddress(Long personId, Address address) {
         existsByIdPerson(personId);
+        setMainAddress(personId, address);
         address.getPerson().setId(personId);
         Person person = findByPersonId(personId);
         person.setAddress(address);
@@ -56,11 +57,21 @@ public class Service {
         return addressRepository.findByPersonId(personId);
     }
 
-    public void existsByIdPerson(Long personId){
+    public void existsByIdPerson(Long personId) {
         boolean personExist = personrepository.existsById(personId);
-        if (!personExist){
+        if (!personExist) {
             throw new LoginNotExistsException();
         }
     }
 
+    public void setMainAddress(Long personId, Address address) {
+        List<Address> exist = addressRepository.findByPersonId(personId);
+        if (address.getMainAddress()) {
+            exist.forEach(it -> {
+                        it.setMainAddress(false);
+                        addressRepository.save(it);
+                    }
+            );
+        }
+    }
 }
