@@ -6,17 +6,15 @@ import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.repository.AddressRepository;
 import com.example.gerenciarpessoas.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@org.springframework.stereotype.Service
-public class Service {
+@Service
+public class PersonService {
     @Autowired
     PersonRepository personrepository;
-    @Autowired
-    AddressRepository addressRepository;
-
     public List<Person> findPeople() {
         return personrepository.findAll();
     }
@@ -39,24 +37,6 @@ public class Service {
         return person.orElse(null);
     }
 
-    public Address saveAddress(Long personId, Address address) {
-        existsByIdPerson(personId);
-        setMainAddress(personId, address);
-        address.getPerson().setId(personId);
-        Person person = findByPersonId(personId);
-        person.setAddress(address);
-        return addressRepository.save(address);
-    }
-
-    public List<Address> findAddress() {
-        return addressRepository.findAll();
-    }
-
-    public List<Address> findAddressPersonId(Long personId) {
-        existsByIdPerson(personId);
-        return addressRepository.findByPersonId(personId);
-    }
-
     public void existsByIdPerson(Long personId) {
         boolean personExist = personrepository.existsById(personId);
         if (!personExist) {
@@ -64,14 +44,4 @@ public class Service {
         }
     }
 
-    public void setMainAddress(Long personId, Address address) {
-        List<Address> exist = addressRepository.findByPersonId(personId);
-        if (address.getMainAddress()) {
-            exist.forEach(it -> {
-                        it.setMainAddress(false);
-                        addressRepository.save(it);
-                    }
-            );
-        }
-    }
 }

@@ -1,10 +1,8 @@
 package com.example.gerenciarpessoas.controller;
 
-import com.example.gerenciarpessoas.domain.Address;
 import com.example.gerenciarpessoas.domain.Person;
-import com.example.gerenciarpessoas.service.Service;
+import com.example.gerenciarpessoas.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +18,7 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/person")
 public class PersonController {
     @Autowired
-    private Service service;
+    private PersonService service;
 
     @PostMapping
     public Person createPerson(@RequestBody Person Person) {
@@ -40,21 +38,6 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<Person> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findByPersonId(id));
-    }
-
-    @PostMapping("/{personId}/address")
-    public ResponseEntity<Address> createAddress(@PathVariable Long personId, @RequestBody Address address) {
-        return new ResponseEntity<>(service.saveAddress(personId, address), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/address")
-    public ResponseEntity<List<Address>> findAllAddress() {
-        return ResponseEntity.ok(service.findAddress());
-    }
-
-    @GetMapping("/{personId}/address")
-    public ResponseEntity<List<Address>> findAddressId(@PathVariable Long personId) {
-        return ResponseEntity.ok(service.findAddressPersonId(personId));
     }
 
 }

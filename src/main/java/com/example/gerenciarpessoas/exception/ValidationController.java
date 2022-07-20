@@ -1,4 +1,4 @@
-package com.example.gerenciarpessoas.controller;
+package com.example.gerenciarpessoas.exception;
 
 import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.exception.MessageExceptionHandler;
