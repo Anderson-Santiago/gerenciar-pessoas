@@ -2,6 +2,7 @@ package com.example.gerenciarpessoas.service;
 
 import com.example.gerenciarpessoas.domain.Address;
 import com.example.gerenciarpessoas.domain.Person;
+import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.repository.AddressRepository;
 import com.example.gerenciarpessoas.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class Service {
     }
 
     public Person updatePerson(Long personId, Person person) {
+        existsByIdPerson(personId);
         Person personToPersist = findByPersonId(personId);
         personToPersist.setName(person.getName());
         personToPersist.setBirthDate(person.getBirthDate());
@@ -32,16 +34,13 @@ public class Service {
     }
 
     public Person findByPersonId(Long personId) {
-        Optional<Person> Person = personrepository.findById(personId);
-        return Person.orElse(null);
+        existsByIdPerson(personId);
+        Optional<Person> person = personrepository.findById(personId);
+        return person.orElse(null);
     }
 
-
-
-
-
-
     public Address saveAddress(Long personId, Address address) {
+        existsByIdPerson(personId);
         address.getPerson().setId(personId);
         Person person = findByPersonId(personId);
         person.setAddress(address);
@@ -51,10 +50,17 @@ public class Service {
     public List<Address> findAddress() {
         return addressRepository.findAll();
     }
+
     public List<Address> findAddressPersonId(Long personId) {
-//        Person person = findByPersonId(personId);
-//        Long idAddress = person.getAddress().getId();
+        existsByIdPerson(personId);
         return addressRepository.findByPersonId(personId);
+    }
+
+    public void existsByIdPerson(Long personId){
+        boolean personExist = personrepository.existsById(personId);
+        if (!personExist){
+            throw new LoginNotExistsException();
+        }
     }
 
 }

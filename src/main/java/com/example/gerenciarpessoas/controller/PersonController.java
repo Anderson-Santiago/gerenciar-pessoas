@@ -2,8 +2,10 @@ package com.example.gerenciarpessoas.controller;
 
 import com.example.gerenciarpessoas.domain.Address;
 import com.example.gerenciarpessoas.domain.Person;
+import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,25 +35,17 @@ public class PersonController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person person) {
-        Person Person = service.findByPersonId(id);
-        if (Person != null) {
-            return ResponseEntity.ok(service.updatePerson(id, person));
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(service.updatePerson(id, person));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> findAllById(@PathVariable Long id) {
-        Person Person = service.findByPersonId(id);
-        if (Person != null) {
-            return ResponseEntity.ok(Person);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Person> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findByPersonId(id));
     }
 
     @PostMapping("/{personId}/address")
-    public Address createAddress(@PathVariable Long personId, @RequestBody Address address) {
-        return service.saveAddress(personId, address);
+    public ResponseEntity<Address> createAddress(@PathVariable Long personId, @RequestBody Address address) {
+        return new ResponseEntity<>(service.saveAddress(personId, address), HttpStatus.CREATED);
     }
 
     @GetMapping("/address")
