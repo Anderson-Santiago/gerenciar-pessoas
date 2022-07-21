@@ -25,11 +25,9 @@ public class AddressServiceTest {
     @Mock
     private AddressRepository repository;
     @Mock
-    private PersonRepository personRepository;
+    private PersonService personService;
     @InjectMocks
     private AddressService service;
-    @InjectMocks
-    private PersonService personService;
 
 
     @Test
@@ -38,9 +36,7 @@ public class AddressServiceTest {
         Person person = PersonGenerator.buildCreatePerson();
 
         Mockito.when(repository.save(any())).thenReturn(address);
-        Mockito.when(personService.savePerson(any())).thenReturn(person);
-
-        
+        Mockito.when(personService.findByPersonId(any())).thenReturn(person);
 
         Address addressCreated = service.saveAddress(person.getId(), address);
         Assertions.assertEquals("Rua da Paz", addressCreated.getStreet());
