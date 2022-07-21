@@ -5,17 +5,13 @@ import com.example.gerenciarpessoas.domain.AddressGenerator;
 import com.example.gerenciarpessoas.domain.Person;
 import com.example.gerenciarpessoas.domain.PersonGenerator;
 import com.example.gerenciarpessoas.repository.AddressRepository;
-import com.example.gerenciarpessoas.repository.PersonRepository;
-import org.hibernate.service.spi.InjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -46,7 +42,6 @@ public class AddressServiceTest {
         Assertions.assertTrue(addressCreated.getMainAddress());
 
         Mockito.verify(repository, times(1)).save(any());
-
+        Mockito.verify(personService, times(1)).findByPersonId(any());
     }
-
 }

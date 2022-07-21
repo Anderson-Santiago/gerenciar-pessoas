@@ -13,6 +13,7 @@ import java.util.Optional;
 public class PersonService {
     @Autowired
     PersonRepository personrepository;
+
     public List<Person> findPeople() {
         return personrepository.findAll();
     }
@@ -35,11 +36,12 @@ public class PersonService {
         return person.orElse(null);
     }
 
-    public void existsByIdPerson(Long personId) {
+    public Long existsByIdPerson(Long personId) {
         boolean personExist = personrepository.existsById(personId);
         if (!personExist) {
             throw new LoginNotExistsException();
         }
+        return personId;
     }
 
 }

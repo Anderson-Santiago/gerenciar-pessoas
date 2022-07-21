@@ -3,6 +3,7 @@ package com.example.gerenciarpessoas.service;
 import com.example.gerenciarpessoas.domain.AddressGenerator;
 import com.example.gerenciarpessoas.domain.Person;
 import com.example.gerenciarpessoas.domain.PersonGenerator;
+import com.example.gerenciarpessoas.exception.LoginNotExistsException;
 import com.example.gerenciarpessoas.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
@@ -38,6 +40,7 @@ public class PersonServiceTest {
 
         Mockito.verify(repository, times(1)).save(any());
     }
+
     @Test
     public void shouldSucessUpdate() {
         Person person = PersonGenerator.buildUpdatePerson();
@@ -48,9 +51,23 @@ public class PersonServiceTest {
 
         Assertions.assertEquals("Santiago Anderson", personCreated.getName());
         Assertions.assertEquals(LocalDate.parse("1999-12-20"), personCreated.getBirthDate());
-        Assertions.assertEquals(AddressGenerator.buildCreateAddress(),personCreated.getAddress());
+        Assertions.assertEquals(AddressGenerator.buildCreateAddress(), personCreated.getAddress());
 
         Mockito.verify(repository, times(1)).save(any());
     }
+
+    @Test
+    public void shouldFailLoginNotFound() {
+        Person person = PersonGenerator.buildCreatePerson();
+
+        Mockito.when(repository.existsById(person.getId())).thenReturn(false);
+
+        LoginNotExistsException exception = assertThrows(LoginNotExistsException.class, () -> service.existsByIdPerson(person.getId()));
+
+        Assertions.assertEquals("Login não encontrado!", exception.getMessage());
+
+        Mockito.verify(repository, times(1)).existsById(any());
+    }
+
 
 }
