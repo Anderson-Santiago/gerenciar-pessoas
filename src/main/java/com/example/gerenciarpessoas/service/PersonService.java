@@ -1,9 +1,7 @@
 package com.example.gerenciarpessoas.service;
 
-import com.example.gerenciarpessoas.domain.Address;
 import com.example.gerenciarpessoas.domain.Person;
 import com.example.gerenciarpessoas.exception.LoginNotExistsException;
-import com.example.gerenciarpessoas.repository.AddressRepository;
 import com.example.gerenciarpessoas.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
